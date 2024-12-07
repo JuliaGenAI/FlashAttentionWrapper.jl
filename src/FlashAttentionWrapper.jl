@@ -1,6 +1,5 @@
 module FlashAttentionWrapper
 
-export mha
 
 include("rrule.jl")
 include("lux.jl")
