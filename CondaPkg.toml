@@ -1,0 +1,4 @@
+channels = ["conda-forge", "pytorch"]
+
+[deps.pytorch]
+channel = "pytorch"

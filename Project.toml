@@ -1,0 +1,29 @@
+name = "FlashAttentionWrapper"
+uuid = "4822a80a-c2d5-4bbd-b1da-f89b711347c8"
+authors = ["Jun Tian <tianjun.cpp@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+BFloat16s = "ab4f0b2a-ad5b-11e8-123f-65d77653426b"
+CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+ChainRules = "082447d4-558c-5d27-93f4-14fc19e9eca2"
+ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
+DLPack = "53c2dc0f-f7d5-43fd-8906-6c0220547083"
+LuxCore = "bb33d45b-7691-41d6-9220-0943567d0623"
+PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
+
+[compat]
+BFloat16s = "0.5.0"
+CUDA = "5.5.2"
+ChainRules = "1.72.1"
+ChainRulesCore = "1.25.0"
+CondaPkg = "0.2.24"
+DLPack = "0.3.0"
+LuxCore = "1.2.0"
+PythonCall = "0.9.23"
+Zygote = "0.6.41"
+
+[extras]
+CUDA_Runtime_jll = "76a88914-d11a-5bdc-97e0-2f5a05c973a2"
