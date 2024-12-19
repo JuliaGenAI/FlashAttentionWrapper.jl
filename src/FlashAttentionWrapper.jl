@@ -1,6 +1,6 @@
 module FlashAttentionWrapper
 
-
+include("install.jl")
 include("rrule.jl")
 include("lux.jl")
 
