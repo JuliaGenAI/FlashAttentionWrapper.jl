@@ -1,9 +1,11 @@
 using DLPack
 using PythonCall
+using Random
 
 export mha, mha_varlen, mha_with_kvcache
 
 import ChainRulesCore as CRC
+import LuxCore
 
 const torch = Ref{Py}()
 const fa = Ref{Py}()
@@ -11,7 +13,7 @@ const fa = Ref{Py}()
 # TODO: set rng in both forward & backward.
 # Currently set to nothing
 
-@kwdef struct FlashAttentionParams
+@kwdef struct FlashAttentionParams <: LuxCore.AbstractLuxLayer
     # nothing or (num_head,) or (num_head, batch_size)
     alibi_slopes::Union{Nothing,AbstractVector,AbstractMatrix} = nothing
     dropout::Float64 = 0.0
@@ -23,6 +25,15 @@ const fa = Ref{Py}()
     is_return_softmax::Bool = false
     deterministic::Bool = false
 end
+
+const Attention = FlashAttentionParams
+export Attention
+
+LuxCore.initialparameters(::AbstractRNG, ::Attention) = (;)
+LuxCore.initialstates(::AbstractRNG, ::Attention) = (;)
+
+# TODO: put intermidiate data into state?
+(m::Attention)((q, k, v), ps, st) = mha(q, k, v; (f => getfield(m, f) for f in fieldnames(Attention))...), st
 
 function _mha(q, k, v; softmax_scale=nothing, kw...)
     ps = FlashAttentionParams(; softmax_scale=something(softmax_scale, size(k, 1)^(-0.5)), kw...)
