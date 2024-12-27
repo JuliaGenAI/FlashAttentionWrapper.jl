@@ -9,4 +9,7 @@ function install()
         pip = CondaPkg.which("pip")
         run(`$pip install flash-attn --no-build-isolation`)
     end
+
+    torch[] = pyimport("torch")
+    fa[] = pyimport("flash_attn_2_cuda")
 end

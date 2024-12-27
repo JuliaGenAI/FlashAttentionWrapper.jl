@@ -4,6 +4,10 @@ using CUDA
 using Test
 using Zygote
 
+if CUDA.functional()
+
+    FlashAttentionWrapper.install()
+
 @testset begin
     head_dim = 256
     n_heads = 9
@@ -34,4 +38,5 @@ using Zygote
     @test maximum(abs.(Δq_nn .- Δq_fa)) < 3.0f-3
     @test maximum(abs.(Δk_nn .- Δk_fa)) < 3.0f-3
     @test maximum(abs.(Δv_nn .- Δv_fa)) < 3.0f-3
+end
 end
