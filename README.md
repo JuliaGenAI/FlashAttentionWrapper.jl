@@ -63,7 +63,9 @@ m = Chain(
             ReshapeLayer((head_dim, n_head, seq_len))
         ),
     ),
-    Attention()
+    Attention(),
+    ReshapeLayer((hidden_dim, seq_len)),
+    Dense(hidden_dim => hidden_dim, use_bias=false),
 )
 
 using Random
@@ -72,6 +74,39 @@ ps, st = LuxCore.setup(rng, m)
 cu_ps = recursive_map(CuArray{Float16}, ps)
 
 o, _ = m(x, cu_ps, st)
+```
+
+Or if you prefer Flux.jl:
+
+```julia
+using Flux
+
+head_dim, n_head, seq_len, batch_size = 256, 8, 1024, 4
+hidden_dim = head_dim * n_head
+
+x = CUDA.randn(Float16, (hidden_dim, seq_len, batch_size))
+
+m = Flux.Chain(
+    Flux.Parallel(
+        tuple,
+        Flux.Chain(
+            Flux.Dense(CUDA.randn(Float16, hidden_dim, hidden_dim), false),
+            x -> reshape(x, head_dim, n_head, seq_len, batch_size),
+        ),
+        Flux.Chain(
+            Flux.Dense(CUDA.randn(Float16, hidden_dim, hidden_dim), false),
+            x -> reshape(x, head_dim, n_head, seq_len, batch_size),
+        ),
+        Flux.Chain(
+            Flux.Dense(CUDA.randn(Float16, hidden_dim, hidden_dim), false),
+            x -> reshape(x, head_dim, n_head, seq_len, batch_size),
+        ),
+    ),
+    qkv -> reshape(mha(qkv...;), :, seq_len, batch_size),
+    Flux.Dense(CUDA.randn(Float16, hidden_dim, hidden_dim), false),
+)
+
+m(x)
 ```
 
 ## TODO List
