@@ -113,3 +113,4 @@ m(x)
 
 - [ ] Add benchmark
 - [ ] Support FlexAttention?
+- [ ] Support [FlashInfer](https://github.com/flashinfer-ai/flashinfer)?
